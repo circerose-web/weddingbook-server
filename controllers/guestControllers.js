@@ -3,12 +3,12 @@ const router = express.Router();
 const validateSession = require("../middleware/validateSession");
 
 /************************
- * RECIPE BLOG *
+ * RECIPE CREATE *
  *************************/
 router.post("/", validateSession, (req, res) => {
   const blogEntry = {
-    title: req.body.blog.title,
-    date: req.body.blog.date,
+    name: req.body.guest.name,
+    date: req.body.guest.date,
     activity: req.body.blog.activity,
     thoughts: req.body.blog.thoughts,
   };
@@ -18,7 +18,7 @@ router.post("/", validateSession, (req, res) => {
 });
 
 /*******************************
- * GET ALL BLOGS BY USER *
+ * GET ALL COCKTAILS BY USER *
  ********************************/
 router.get("/", validateSession, (req, res) => {
   Blog.findAll({ where: { userId: req.user.id } })
@@ -35,7 +35,7 @@ router.get("/", validateSession, (req, res) => {
 });
 
 /*******************************
- * SEARCH BLOGS BY NAME *
+ * SEARCH COCKTAILS BY NAME *
  ********************************/
 router.get("/blog/:name", (req, res) => {
   Blog.findAll({ where: { name: req.params.name } })
@@ -52,7 +52,7 @@ router.get("/blog/:name", (req, res) => {
 });
 
 /*******************************
- * UPDATE BLOG *
+ * UPDATE COCKTAIL RECIPE *
  ********************************/
 router.put("/:id", validateSession, (req, res) => {
   const blogUpdate = {
@@ -72,7 +72,7 @@ router.put("/:id", validateSession, (req, res) => {
 });
 
 /*************************
- * DELETE BLOG *
+ * DELETE COCKTAIL *
  **************************/
 router.delete("/:id", validateSession, (req, res) => {
   Blog.destroy({ where: { id: req.params.id, userId: req.user.id } })

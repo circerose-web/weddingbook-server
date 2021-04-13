@@ -1,29 +1,19 @@
 require("dotenv").config();
-let express = require("express");
-let app = express();
-let sequelize = require("./db");
-
-let podcast = require("./controllers/wedding");
-let user = require("./controllers/usercontroller");
+const express = require("express");
+const app = express();
+const sequelize = require("./db");
+const User = require("./controllers/userController");
+const Blog = require("./controllers/blogController");
+const Guest = require("./controllers/guestController");
 
 sequelize.sync();
-// sequelize.sync({force: true})
 app.use(require("./middleware/headers"));
-
-// app.options('*', (req, res) => {
-//     res.json({
-//       status: 'OK'
-//     });
-//   });
 app.use(express.json());
 
-app.use("/user", user);
-app.use("/wedding", wedding);
+app.use("/user", User);
+app.use("/blog", Blog);
+app.use("/guest", Guest);
 
 app.listen(3000, function () {
-  console.log("App is listening on port 3000");
+  console.log("Wedding Book server is listening on port 3000");
 });
-
-// app.listen(process.env.PORT, () => {
-//     console.log(`server is listening on port ${process.env.PORT}`)
-// })

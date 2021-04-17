@@ -1,109 +1,74 @@
-const bycrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const router = require("express").Router();
 const User = require("../db").import("../models/user");
-const validateAdmin = require("../middleware/validateAdmin.js");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-// USER SIGN UP
-
-router.post("/register", function (req, res) {
+/***************************
+ * USER REGISTER *
+ ****************************/
+router.post("/register", (req, res) => {
   User.create({
-    firstName: req.body.user.firstName,
-    lastName: req.body.user.lastName,
     email: req.body.user.email,
-    password: bycrypt.hashSync(req.body.user.password, 13),
-    isAdmin: req.body.user.isAdmin,
+    password: bcrypt.hashSync(req.body.user.password, 13),
   })
-    .then(function createSuccess(user) {
-      let token = jwt.sign(
-        { id: user.id, isAdmin: user.isAdmin },
-        process.env.JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 }
-      );
+    .then((user) => {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: 60 * 60 * 24,
+      });
+
       res.status(200).json({
         user: user,
-        message: "User created successfully. Happy Planning!",
-        token: token,
+        message: "User is now registered.",
+        sessionToken: token,
       });
     })
-    .catch((err) => res.status(500).json({ error: err }));
+    .catch((err) => {
+      res.status(500).json({
+        error: "Register did not work.",
+      });
+    });
 });
 
-// USER LOGIN
-
-router.post("/login", function (req, res) {
+/***************************
+ * USER LOGIN*
+ ****************************/
+router.post("/login", (req, res) => {
   User.findOne({
     where: {
       email: req.body.user.email,
     },
   })
-    .then(function loginSuccess(user) {
-      if (user) {
-        bycrypt.compare(
+    .then((user) => {
+      if (user === null) {
+        return res.status(404).json({ message: "user not found" });
+      } else {
+        bcrypt.compare(
           req.body.user.password,
           user.password,
-          function (err, matches) {
+          (err, matches) => {
             if (matches) {
-              let token = jwt.sign(
-                { id: user.id, isAdmin: user.isAdmin },
-                process.env.JWT_SECRET,
-                { expiresIn: 60 * 60 * 24 }
-              );
+              let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: 60 * 60 * 24,
+              });
+
               res.status(200).json({
                 user: user,
-                message: "User logged in, make sure to record your memories!",
-                token: token,
+                message: "User logged in successfully!",
+                sessionToken: token,
               });
             } else {
-              res.status(502).send({ error: "login failed" });
+              res.status(502).send({ error: "Login Failed" });
             }
           }
         );
-      } else {
-        res.status(500).json({ error: err });
       }
     })
-    .catch((err) => res.status(500).json({ error: err }));
-});
-
-// GET USER INFO (ALL) *PROTECTED ADMIN ROUTE*
-
-router.get("/userinfo", validateAdmin, function (req, res) {
-  User.findAll()
-    .then((users) => res.status(200).json(users))
-    .catch((err) => res.status(500).json({ error: err }));
-});
-
-// UPDATE A USER *PROTECTED ADMIN ROUTE* - PROMOTE USER TO ADMIN
-router.put("/update/:id", validateAdmin, function (req, res) {
-  const updateUser = {
-    firstName: req.body.user.firstName,
-    lastName: req.body.user.lastName,
-    email: req.body.user.email,
-    password: req.body.user.password,
-    isAdmin: req.body.user.isAdmin,
-  };
-
-  const query = { where: { id: req.params.id } };
-
-  User.update(updateUser, query)
-    .then((recordsChanged) =>
-      res.status(200).json({ message: `${recordsChanged} records changed.` })
-    )
-    .catch((err) => res.status(500).json({ error: err }));
-});
-
-// DELETE A USER *PROTECTED ADMIN ROUTE*
-
-router.delete("/delete/:id", validateAdmin, function (req, res) {
-  const query = { where: { id: req.params.id } };
-  User.destroy(query).then(
-    (recordsChanged) =>
-      res.status(200).json({
-        message: `${recordsChanged} records changed.`,
-      }),
-    (err) => res.status(500).json({ error: err, message: "delete failed" })
-  );
+    .catch((err) => {
+      res.status(500).json({
+        error: "You are not logged in.",
+      });
+    });
 });
 
 module.exports = router;

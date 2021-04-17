@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const sequelize = require("./db");
 const User = require("./controllers/userController");
-const Blog = require("./controllers/blogController");
-const Guest = require("./controllers/guestController");
+const Blog = require("./controllers/blogControllers");
+const Guest = require("./controllers/guestControllers");
 
 sequelize.sync();
 app.use(require("./middleware/headers"));

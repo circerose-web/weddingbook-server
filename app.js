@@ -14,6 +14,6 @@ app.use("/user", User);
 app.use("/blog", Blog);
 app.use("/guest", Guest);
 
-app.listen(3000, function () {
+app.listen(process.env.PORT, function () {
   console.log("Wedding Book server is listening on port 3000");
 });

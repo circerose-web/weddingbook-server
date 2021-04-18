@@ -7,10 +7,10 @@ const validateSession = require("../middleware/validateSession");
  *************************/
 router.post("/", validateSession, (req, res) => {
   const blogEntry = {
-    title: req.body.blog.title,
-    date: req.body.blog.date,
-    activity: req.body.blog.activity,
-    thoughts: req.body.blog.thoughts,
+    title: req.body.title,
+    date: req.body.date,
+    activity: req.body.activity,
+    thoughts: req.body.thoughts,
   };
   Blog.create(blogEntry)
     .then((logs) => res.status(200).json(logs))

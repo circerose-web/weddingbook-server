@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const validateSession = require("../middleware/validateSession");
+const Blog = require("../db").import("../models/blog");
 
 /************************
- * RECIPE BLOG *
+  BLOG *
  *************************/
 router.post("/", validateSession, (req, res) => {
   const blogEntry = {
     title: req.body.title,
     date: req.body.date,
     activity: req.body.activity,
+    description: req.body.description,
     thoughts: req.body.thoughts,
   };
   Blog.create(blogEntry)

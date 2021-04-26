@@ -7,6 +7,7 @@ const Blog = require("./controllers/blogControllers");
 const Guest = require("./controllers/guestControllers");
 
 sequelize.sync();
+
 app.use(require("./middleware/headers"));
 app.use(express.json());
 

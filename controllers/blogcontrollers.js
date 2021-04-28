@@ -46,7 +46,7 @@ router.get("/blog/:name", (req, res) => {
         return res
           .status(200)
           .json({ message: "No blog posts were found! Try creating one." });
-      res.status(200).json({ cocktails });
+      res.status(200).json({ blogs });
     })
     .catch((error) => {
       res.status(500).json({ error });

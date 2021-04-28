@@ -8,11 +8,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    name: {
-      type: DataTypes.BOOLEAN,
+    side: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    imedFam: {
+    relation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    theirSpouse: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    theirKids: {
       type: DataTypes.STRING,
       allowNull: false,
     },

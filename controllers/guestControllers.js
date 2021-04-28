@@ -1,60 +1,49 @@
 const express = require("express");
 const router = express.Router();
 const validateSession = require("../middleware/validateSession");
+const Guest = require("../db").import("../models/guest");
 
-/************************
- * RECIPE CREATE *
- *************************/
-router.post("/guest", validateSession, (req, res) => {
+router.post("/", validateSession, (req, res) => {
   const guestEntry = {
-    name: req.guest.name,
-    side: req.guest.side,
-    relation: req.guest.relation,
-    theirSpouse: req.guest.theirSpouse,
-    theirKids: req.guest.theirKids,
+    name: req.body.name,
+    side: req.body.side,
+    relation: req.body.relation,
+    theirSpouse: req.body.theirSpouse,
+    theirKids: req.body.theirKids,
   };
   Guest.create(guestEntry)
     .then((logs) => res.status(200).json(logs))
     .catch((err) => res.status(500).json({ error: err }));
 });
 
-/*******************************
- * GET ALL COCKTAILS BY USER *
- ********************************/
 router.get("/", validateSession, (req, res) => {
   Guest.findAll({ where: { userId: req.user.id } })
-    .then((blogs) => {
-      if (blogs.length === 0)
+    .then((guests) => {
+      if (guests.length === 0)
         return res
           .status(200)
           .json({ message: "No guests were found! Try creating one." });
-      res.status(200).json({ cocktails });
+      res.status(200).json({ guests });
     })
     .catch((error) => {
       res.status(500).json({ error });
     });
 });
 
-/*******************************
- * SEARCH COCKTAILS BY NAME *
- ********************************/
 router.get("/guest/:name", (req, res) => {
   Guest.findAll({ where: { name: req.params.name } })
-    .then((blogs) => {
-      if (blogs.length === 0)
+    .then((guests) => {
+      if (guests.length === 0)
         return res
           .status(200)
           .json({ message: "No guest posts were found! Try creating one." });
-      res.status(200).json({ cocktails });
+      res.status(200).json({ guests });
     })
     .catch((error) => {
       res.status(500).json({ error });
     });
 });
 
-/*******************************
- * UPDATE COCKTAIL RECIPE *
- ********************************/
 router.put("/:id", validateSession, (req, res) => {
   const guestUpdate = {
     title: req.body.title,
@@ -72,9 +61,6 @@ router.put("/:id", validateSession, (req, res) => {
     });
 });
 
-/*************************
- * DELETE COCKTAIL *
- **************************/
 router.delete("/:id", validateSession, (req, res) => {
   Guest.destroy({ where: { id: req.params.id, userId: req.user.id } })
     .then((result) => {

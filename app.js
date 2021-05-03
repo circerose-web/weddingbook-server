@@ -8,8 +8,8 @@ const Guest = require("./controllers/guestControllers");
 
 sequelize.sync();
 
-app.use(require("./middleware/headers"));
 app.use(express.json());
+app.use(require("./middleware/headers"));
 
 app.use("/user", User);
 app.use("/blog", Blog);

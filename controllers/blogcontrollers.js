@@ -13,6 +13,7 @@ router.post("/", validateSession, (req, res) => {
     activity: req.body.activity,
     description: req.body.description,
     thoughts: req.body.thoughts,
+    userId: req.user.id,
   };
   Blog.create(blogEntry)
     .then((logs) => res.status(200).json(logs))
@@ -22,7 +23,7 @@ router.post("/", validateSession, (req, res) => {
 /*******************************
  * GET ALL BLOGS BY USER *
  ********************************/
-router.get("/mine", validateSession, (req, res) => {
+router.get("/", validateSession, (req, res) => {
   Blog.findAll({ where: { userId: req.user.id } })
     .then((blogs) => {
       if (blogs.length === 0)

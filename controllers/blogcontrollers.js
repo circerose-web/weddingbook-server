@@ -22,7 +22,7 @@ router.post("/", validateSession, (req, res) => {
 /*******************************
  * GET ALL BLOGS BY USER *
  ********************************/
-router.get("/", validateSession, (req, res) => {
+router.get("/mine", validateSession, (req, res) => {
   Blog.findAll({ where: { userId: req.user.id } })
     .then((blogs) => {
       if (blogs.length === 0)

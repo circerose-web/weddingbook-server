@@ -8,9 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     date: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: 0,
     },
     activity: {
       type: DataTypes.STRING,

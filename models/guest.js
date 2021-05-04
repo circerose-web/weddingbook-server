@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define("comment", {
-    //   image: {
-    //     type: DataTypes.STRING,
-    //     allowNull: false,
-    //   },
+    userId: {
+      type: DataTypes.INTEGER,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,

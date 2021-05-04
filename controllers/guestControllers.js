@@ -10,6 +10,7 @@ router.post("/", validateSession, (req, res) => {
     relation: req.body.relation,
     theirSpouse: req.body.theirSpouse,
     theirKids: req.body.theirKids,
+    userId: req.user.id,
   };
   Guest.create(guestEntry)
     .then((logs) => res.status(200).json(logs))

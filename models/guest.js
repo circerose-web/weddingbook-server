@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define("comment", {
+  const Guest = sequelize.define("guest", {
     userId: {
       type: DataTypes.INTEGER,
     },
@@ -24,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  return Comment;
+  return Guest;
 };

@@ -47,9 +47,9 @@ router.get("/guest/:name", (req, res) => {
 
 router.put("/:id", validateSession, (req, res) => {
   const guestUpdate = {
-    title: req.body.title,
+    name: req.body.name,
   };
-  Guest.update(guestUpdate, {
+  Guest.update(req.body, {
     where: { id: req.params.id, userId: req.user.id },
   })
     .then((response) => {

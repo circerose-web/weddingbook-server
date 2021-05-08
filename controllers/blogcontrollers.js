@@ -61,7 +61,7 @@ router.put("/:id", validateSession, (req, res) => {
   const blogUpdate = {
     title: req.body.title,
   };
-  Blog.update(blogUpdate, {
+  Blog.update(req.body, {
     where: { id: req.params.id, userId: req.user.id },
   })
     .then((response) => {

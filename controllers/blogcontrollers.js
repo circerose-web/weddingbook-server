@@ -29,7 +29,9 @@ router.get("/", validateSession, (req, res) => {
       if (blogs.length === 0)
         return res
           .status(200)
-          .json({ message: "No blog posts were found! Try creating one." });
+          .json({
+            message: "No blog posts were found! Try creating a new one.",
+          });
       res.status(200).json({ blogs });
     })
     .catch((error) => {

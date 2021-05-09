@@ -27,11 +27,9 @@ router.get("/", validateSession, (req, res) => {
   Blog.findAll({ where: { userId: req.user.id } })
     .then((blogs) => {
       if (blogs.length === 0)
-        return res
-          .status(200)
-          .json({
-            message: "No blog posts were found! Try creating a new one.",
-          });
+        return res.status(200).json({
+          message: "No blog posts were found! Try creating one.",
+        });
       res.status(200).json({ blogs });
     })
     .catch((error) => {
